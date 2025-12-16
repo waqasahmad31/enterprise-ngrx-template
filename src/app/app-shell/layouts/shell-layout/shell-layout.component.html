@@ -1,0 +1,183 @@
+<mat-sidenav-container class="shell-container">
+  <mat-sidenav
+    class="shell-sidenav"
+    [mode]="sidenavMode()"
+    [opened]="sidenavOpened()"
+    (openedChange)="drawerOpen = $event"
+  >
+    <div class="brand" aria-label="Application">
+      <mat-icon aria-hidden="true">business</mat-icon>
+      <span class="brand-title">Enterprise</span>
+    </div>
+
+    <nav class="nav" aria-label="Primary navigation">
+      @for (section of navSections(); track section.label) {
+        <div class="nav-section">
+          <div class="nav-section-title">{{ section.label }}</div>
+          <mat-nav-list>
+            @for (item of section.items; track item.route) {
+              @if (item.visible) {
+                <a mat-list-item href="#" (click)="$event.preventDefault(); openNav(item.route)">
+                  <mat-icon matListItemIcon aria-hidden="true">{{ item.icon }}</mat-icon>
+                  <span matListItemTitle>{{ item.label }}</span>
+                </a>
+              }
+            }
+          </mat-nav-list>
+        </div>
+      }
+    </nav>
+  </mat-sidenav>
+
+  <mat-sidenav-content class="shell">
+    <mat-toolbar class="shell-toolbar">
+      <div class="toolbar-start">
+        @if (isHandset()) {
+          <button
+            mat-icon-button
+            type="button"
+            class="menu-btn"
+            aria-label="Toggle navigation"
+            (click)="toggleDrawer()"
+          >
+            <mat-icon>menu</mat-icon>
+          </button>
+        }
+        <span class="toolbar-title">Enterprise</span>
+      </div>
+
+      <div class="toolbar-center">
+        <div class="toolbar-search">
+          <mat-form-field class="shell-search" appearance="outline" subscriptSizing="dynamic">
+            <mat-icon matPrefix>search</mat-icon>
+            <input
+              matInput
+              placeholder="Search"
+              [(ngModel)]="searchQuery"
+              [matAutocomplete]="searchAuto"
+              (input)="onSearchInput(searchQuery)"
+              aria-label="Global search"
+            />
+            @if (searchQuery) {
+              <button
+                mat-icon-button
+                matSuffix
+                type="button"
+                aria-label="Clear search"
+                (click)="searchQuery = ''; searchSuggestions = []"
+              >
+                <mat-icon>close</mat-icon>
+              </button>
+            }
+          </mat-form-field>
+
+          <mat-autocomplete
+            #searchAuto="matAutocomplete"
+            panelClass="search-panel"
+            (optionSelected)="selectSearch($event.option.value)"
+          >
+            @for (item of searchSuggestions; track item.route) {
+              <mat-option [value]="item">
+                <div class="search-item">
+                  <mat-icon aria-hidden="true">{{ iconFor(item) }}</mat-icon>
+                  <div class="search-meta">
+                    <div class="search-label">{{ item.label }}</div>
+                    @if (item.description) {
+                      <div class="search-desc">{{ item.description }}</div>
+                    }
+                  </div>
+                  <span class="search-type">{{ item.type }}</span>
+                </div>
+              </mat-option>
+            }
+          </mat-autocomplete>
+        </div>
+      </div>
+
+      <div class="toolbar-end">
+        <button mat-icon-button type="button" aria-label="Toggle theme" (click)="toggleThemeMode()">
+          <mat-icon>{{ themeModeSignal() === 'dark' ? 'light_mode' : 'dark_mode' }}</mat-icon>
+        </button>
+
+        <button
+          mat-icon-button
+          type="button"
+          aria-label="Notifications"
+          [matMenuTriggerFor]="notifMenu"
+          [matBadge]="unreadCountSignal() ? unreadCountSignal().toString() : null"
+          matBadgeColor="warn"
+          matBadgeOverlap="false"
+        >
+          <mat-icon>notifications</mat-icon>
+        </button>
+
+        <mat-menu #notifMenu="matMenu" class="notif-panel">
+          <div class="notif-head">
+            <div>
+              <div class="notif-title">Notifications</div>
+              <div class="notif-subtitle">
+                @if (unreadCountSignal(); as unread) {
+                  {{ unread }} unread
+                }
+              </div>
+            </div>
+
+            <button mat-button type="button" (click)="markAllNotificationsRead()">
+              Mark all read
+            </button>
+          </div>
+
+          <div class="notif-list" aria-label="Recent notifications">
+            @if (notificationItemsSignal().length === 0) {
+              <p class="notif-empty">No notifications.</p>
+            } @else {
+              @for (n of notificationItemsSignal().slice(0, 5); track n.id) {
+                <button
+                  mat-menu-item
+                  type="button"
+                  class="notif-item"
+                  [class.unread]="!n.readAtEpochMs"
+                  (click)="openNotification(n)"
+                >
+                  <div class="notif-item-title">{{ n.title }}</div>
+                  <div class="notif-item-msg">{{ n.message }}</div>
+                </button>
+              }
+            }
+          </div>
+
+          <div class="notif-actions">
+            <button mat-button type="button" [routerLink]="'/notifications'">View all</button>
+          </div>
+        </mat-menu>
+
+        @if (user$ | async; as user) {
+          <button mat-button type="button" aria-label="User menu" [matMenuTriggerFor]="userMenu">
+            <mat-icon aria-hidden="true">person</mat-icon>
+            <span class="user">{{ user.displayName }}</span>
+          </button>
+
+          <mat-menu #userMenu="matMenu">
+            <button
+              mat-menu-item
+              type="button"
+              [routerLink]="APP_ROUTES.profile"
+              (click)="closeDrawer()"
+            >
+              <mat-icon aria-hidden="true">person</mat-icon>
+              <span>Profile</span>
+            </button>
+            <button mat-menu-item type="button" (click)="logout()">
+              <mat-icon aria-hidden="true">logout</mat-icon>
+              <span>Sign out</span>
+            </button>
+          </mat-menu>
+        }
+      </div>
+    </mat-toolbar>
+
+    <div class="shell-content">
+      <router-outlet></router-outlet>
+    </div>
+  </mat-sidenav-content>
+</mat-sidenav-container>

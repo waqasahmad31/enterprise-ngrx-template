@@ -1,0 +1,55 @@
+<app-page-header title="Integrations" subtitle="Connected tools and applications"></app-page-header>
+
+<mat-card>
+  <div class="head">
+    <div>
+      <div class="title">Available integrations</div>
+      <div class="subtitle">Connect third-party services to automate workflows</div>
+    </div>
+  </div>
+
+  <div class="table">
+    <table mat-table [dataSource]="integrations" class="integrations-table">
+      <ng-container matColumnDef="name">
+        <th mat-header-cell *matHeaderCellDef>Name</th>
+        <td mat-cell *matCellDef="let i" class="name">{{ i.name }}</td>
+      </ng-container>
+
+      <ng-container matColumnDef="category">
+        <th mat-header-cell *matHeaderCellDef>Category</th>
+        <td mat-cell *matCellDef="let i">{{ i.category }}</td>
+      </ng-container>
+
+      <ng-container matColumnDef="status">
+        <th mat-header-cell *matHeaderCellDef>Status</th>
+        <td mat-cell *matCellDef="let i">
+          <mat-chip-listbox aria-label="Integration status" [disabled]="true">
+            <mat-chip-option [color]="statusColor(i.status)" selected>
+              {{ i.status }}
+            </mat-chip-option>
+          </mat-chip-listbox>
+        </td>
+      </ng-container>
+
+      <ng-container matColumnDef="actions">
+        <th mat-header-cell *matHeaderCellDef class="actions-col"></th>
+        <td mat-cell *matCellDef="let i" class="row-actions">
+          @if (i.status === 'Connected') {
+            <button mat-button type="button" aria-label="Disconnect">
+              <mat-icon aria-hidden="true">link_off</mat-icon>
+              Disconnect
+            </button>
+          } @else {
+            <button mat-flat-button type="button" aria-label="Connect">
+              <mat-icon aria-hidden="true">link</mat-icon>
+              Connect
+            </button>
+          }
+        </td>
+      </ng-container>
+
+      <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+      <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+    </table>
+  </div>
+</mat-card>

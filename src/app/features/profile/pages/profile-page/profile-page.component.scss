@@ -1,0 +1,70 @@
+:host {
+  display: block;
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+}
+
+.card-head {
+  padding: 16px 16px 0 16px;
+}
+
+.title {
+  font-weight: 600;
+  color: var(--app-text);
+}
+
+.subtitle {
+  margin-top: 2px;
+  font-size: 0.875rem;
+  color: var(--app-text-muted);
+}
+
+.rows {
+  display: grid;
+  gap: 12px;
+}
+
+.row {
+  display: grid;
+  grid-template-columns: 120px 1fr;
+  gap: 12px;
+  align-items: center;
+}
+
+.label {
+  color: var(--app-text-muted);
+  font-size: 0.875rem;
+}
+
+.value {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  align-items: center;
+}
+
+.actions {
+  display: flex;
+  justify-content: flex-end;
+  margin-top: 16px;
+}
+
+@media (max-width: 1023px) {
+  .grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 599px) {
+  .row {
+    grid-template-columns: 1fr;
+    gap: 6px;
+  }
+  .actions {
+    justify-content: flex-start;
+  }
+}

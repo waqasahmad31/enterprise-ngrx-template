@@ -1,0 +1,6 @@
+{
+  "apiBaseUrl": "/api",
+  "featureFlags": {
+    "enableUsers": true
+  }
+}

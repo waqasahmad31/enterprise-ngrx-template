@@ -1,0 +1,55 @@
+.public-layout {
+  min-height: 100svh;
+  display: grid;
+  place-items: center;
+  padding: clamp(16px, 4vw, 48px);
+  position: relative;
+  overflow: hidden;
+  background:
+    radial-gradient(
+      900px circle at 20% 10%,
+      color-mix(in oklab, var(--mat-sys-primary, var(--app-text)) 18%, transparent),
+      transparent 60%
+    ),
+    radial-gradient(
+      900px circle at 80% 90%,
+      color-mix(in oklab, var(--app-text-muted) 14%, transparent),
+      transparent 60%
+    ),
+    var(--app-bg);
+}
+
+.public-card {
+  width: min(480px, 100%);
+  border: 1px solid var(--app-border);
+  background: color-mix(in oklab, var(--app-surface) 92%, transparent);
+  -webkit-backdrop-filter: blur(10px);
+  backdrop-filter: blur(10px);
+  position: relative;
+  z-index: 1;
+}
+
+.public-card {
+  padding: 24px;
+  display: grid;
+  gap: 18px;
+}
+
+.public-brand {
+  display: grid;
+  gap: 4px;
+  margin: 0;
+  padding-bottom: 14px;
+  border-bottom: 1px solid var(--app-border);
+}
+
+.public-brand-title {
+  font-size: 1.5rem;
+  font-weight: 600;
+  letter-spacing: 0.2px;
+}
+
+.public-brand-subtitle {
+  font-size: 1rem;
+  color: var(--app-text-muted);
+}

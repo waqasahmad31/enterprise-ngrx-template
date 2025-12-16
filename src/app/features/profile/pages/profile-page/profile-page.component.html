@@ -1,0 +1,64 @@
+<app-page-header title="Profile" subtitle="Account details and preferences"></app-page-header>
+
+@if (user$ | async; as user) {
+  <section class="grid" aria-label="Profile content">
+    <mat-card>
+      <div class="card-head">
+        <div class="title">Account</div>
+        <div class="subtitle">Your identity and access</div>
+      </div>
+
+      <div class="rows">
+        <div class="row">
+          <div class="label">Name</div>
+          <div class="value">{{ user.displayName }}</div>
+        </div>
+        <div class="row">
+          <div class="label">Email</div>
+          <div class="value">{{ user.email }}</div>
+        </div>
+        <div class="row">
+          <div class="label">Roles</div>
+          <div class="value">
+            <mat-chip-listbox aria-label="Roles" [disabled]="true">
+              @for (r of user.roles; track r) {
+                <mat-chip-option selected>{{ r }}</mat-chip-option>
+              }
+            </mat-chip-listbox>
+          </div>
+        </div>
+      </div>
+
+      <div class="actions">
+        <button mat-stroked-button type="button" (click)="logout()">Sign out</button>
+      </div>
+    </mat-card>
+
+    <mat-card>
+      <div class="card-head">
+        <div class="title">Preferences</div>
+        <div class="subtitle">UI configuration stored locally</div>
+      </div>
+
+      <div class="rows">
+        <div class="row">
+          <div class="label">Theme</div>
+          <div class="value">
+            <mat-chip-listbox aria-label="Theme" [disabled]="true">
+              <mat-chip-option selected>{{ themeModeSignal() }}</mat-chip-option>
+            </mat-chip-listbox>
+          </div>
+        </div>
+      </div>
+
+      <div class="actions">
+        <button mat-flat-button type="button" (click)="toggleTheme()">
+          <mat-icon aria-hidden="true">
+            {{ themeModeSignal() === 'dark' ? 'light_mode' : 'dark_mode' }}
+          </mat-icon>
+          Toggle theme
+        </button>
+      </div>
+    </mat-card>
+  </section>
+}

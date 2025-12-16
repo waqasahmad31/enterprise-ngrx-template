@@ -1,0 +1,24 @@
+<header class="page-header">
+  @if (breadcrumbs?.length) {
+    <nav class="breadcrumbs" aria-label="Breadcrumb">
+      @for (crumb of breadcrumbs; track crumb.label; let last = $last) {
+        @if (crumb.url) {
+          <a class="crumb" [routerLink]="crumb.url">{{ crumb.label }}</a>
+        } @else {
+          <span class="crumb" aria-current="page">{{ crumb.label }}</span>
+        }
+        @if (!last) {
+          <mat-icon class="sep" aria-hidden="true">chevron_right</mat-icon>
+        }
+      }
+    </nav>
+  }
+
+  <div class="title-row">
+    <h1 class="title">{{ title }}</h1>
+  </div>
+
+  @if (subtitle) {
+    <p class="subtitle">{{ subtitle }}</p>
+  }
+</header>

@@ -1,0 +1,48 @@
+.full {
+  width: 100%;
+}
+
+.login {
+  display: grid;
+  gap: 12px;
+}
+
+.login-title {
+  margin: 0;
+  font-size: 1.375rem;
+  font-weight: 600;
+  letter-spacing: 0.2px;
+  color: var(--app-text);
+}
+
+.form {
+  display: grid;
+  gap: 14px;
+}
+
+.field {
+  display: grid;
+  gap: 8px;
+}
+
+.hint {
+  margin: 2px 0 0;
+  color: var(--app-text-muted);
+  font-size: 0.875rem;
+}
+
+.divider {
+  position: relative;
+  display: grid;
+  align-items: center;
+  margin: 2px 0;
+}
+
+.divider > span {
+  position: relative;
+  justify-self: center;
+  padding: 0 12px;
+  background: var(--app-surface);
+  color: var(--app-text-muted);
+  font-size: 0.8125rem;
+}

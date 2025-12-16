@@ -1,0 +1,60 @@
+<app-page-header
+  title="Settings"
+  subtitle="Manage organization and application preferences"
+></app-page-header>
+
+<form class="settings" [formGroup]="form">
+  <mat-card>
+    <div class="card-head">
+      <div class="title">Organization</div>
+      <div class="subtitle">Basic organization details</div>
+    </div>
+
+    <div class="grid">
+      <mat-form-field appearance="outline" class="full">
+        <mat-label>Organization name</mat-label>
+        <input matInput formControlName="orgName" autocomplete="organization" />
+      </mat-form-field>
+
+      <mat-form-field appearance="outline" class="full">
+        <mat-label>Support email</mat-label>
+        <input matInput formControlName="supportEmail" autocomplete="email" />
+      </mat-form-field>
+    </div>
+  </mat-card>
+
+  <mat-card>
+    <div class="card-head">
+      <div class="title">Localization</div>
+      <div class="subtitle">Defaults for time and region</div>
+    </div>
+
+    <div class="grid">
+      <mat-form-field appearance="outline" class="full">
+        <mat-label>Timezone</mat-label>
+        <mat-select formControlName="timezone">
+          @for (tz of timezones; track tz) {
+            <mat-option [value]="tz">{{ tz }}</mat-option>
+          }
+        </mat-select>
+      </mat-form-field>
+
+      <div class="toggle">
+        <mat-slide-toggle formControlName="emailReports">Email weekly reports</mat-slide-toggle>
+      </div>
+    </div>
+  </mat-card>
+
+  <mat-card>
+    <div class="card-head">
+      <div class="title">Operations</div>
+      <div class="subtitle">Runtime behavior (placeholder)</div>
+    </div>
+
+    <div class="grid">
+      <div class="toggle">
+        <mat-slide-toggle formControlName="maintenanceMode">Maintenance mode</mat-slide-toggle>
+      </div>
+    </div>
+  </mat-card>
+</form>

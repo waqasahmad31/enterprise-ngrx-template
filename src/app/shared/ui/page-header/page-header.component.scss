@@ -1,0 +1,54 @@
+.page-header {
+  display: grid;
+  gap: 6px;
+  padding-bottom: 12px;
+  margin-bottom: var(--app-section-gap);
+  border-bottom: 1px solid var(--app-border);
+}
+
+.breadcrumbs {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 3px;
+  font-size: 0.875rem;
+  color: var(--app-text-muted);
+}
+
+.crumb {
+  text-decoration: none;
+  color: inherit;
+}
+
+.crumb:hover {
+  text-decoration: underline;
+}
+
+.sep {
+  font-size: 16px;
+  width: 16px;
+  height: 16px;
+  opacity: 0.7;
+  margin: 0 3px;
+}
+
+.title-row {
+  display: flex;
+  align-items: baseline;
+  gap: 10px;
+}
+
+.title {
+  margin: 0;
+  font-size: 1.5rem;
+  line-height: 1.2;
+  font-weight: var(--app-font-weight-semibold);
+  letter-spacing: -0.01em;
+  color: var(--app-text);
+}
+
+.subtitle {
+  margin: 0;
+  font-size: 0.975rem;
+  color: var(--app-text-muted);
+}

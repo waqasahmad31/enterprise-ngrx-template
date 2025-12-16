@@ -1,0 +1,149 @@
+.shell-container {
+  min-height: 100vh;
+  background: var(--app-bg);
+}
+
+.shell-sidenav {
+  width: 280px;
+  border-right: 1px solid var(--app-border);
+  background: var(--app-surface);
+}
+
+.shell {
+  min-height: 100vh;
+  display: grid;
+  grid-template-rows: auto 1fr;
+  background: var(--app-bg);
+}
+
+.shell-toolbar {
+  position: sticky;
+  top: 0;
+  z-index: 10;
+  background: color-mix(in oklab, var(--app-surface) 88%, transparent);
+  -webkit-backdrop-filter: blur(10px);
+  backdrop-filter: blur(10px);
+  border-bottom: 1px solid var(--app-border);
+  padding: 0.5rem 1rem;
+  min-height: 56px;
+  display: flex;
+  gap: 12px;
+}
+
+.toolbar-start {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.toolbar-center {
+  flex: 1;
+  display: flex;
+  justify-content: center;
+}
+
+.toolbar-end {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.menu-btn {
+  margin-right: 8px;
+}
+
+.toolbar-title {
+  font-size: 1.125rem;
+  font-weight: 600;
+  color: var(--app-text);
+}
+
+.toolbar-search {
+  width: min(640px, 46vw);
+}
+
+.toolbar-search .shell-search {
+  width: 100%;
+}
+
+.toolbar-search .shell-search input {
+  width: 100%;
+}
+
+.shell-content {
+  padding: clamp(14px, 2vw, 22px);
+  max-width: var(--app-content-max-width);
+  width: 100%;
+  margin: 0 auto;
+}
+
+.brand {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+  padding: 12px 10px 14px;
+  font-size: 1.125rem;
+  font-weight: 600;
+  color: var(--app-text);
+  border-bottom: 1px solid var(--app-border);
+  margin: -2px 0 10px;
+}
+
+.brand-title {
+  letter-spacing: 0.2px;
+}
+
+.nav-section {
+  margin-bottom: 8px;
+}
+
+.user {
+  margin-left: 6px;
+}
+
+.nav-section-title {
+  font-size: 0.75rem;
+  font-weight: 600;
+  opacity: 0.8;
+  padding: 10px 12px 6px;
+}
+
+.search-item {
+  display: grid;
+  grid-template-columns: auto 1fr auto;
+  gap: 10px;
+  align-items: center;
+}
+
+.search-meta {
+  min-width: 0;
+}
+
+.search-label {
+  font-weight: 600;
+}
+
+.search-desc {
+  font-size: 0.8125rem;
+  opacity: 0.85;
+}
+
+.search-type {
+  font-size: 0.75rem;
+  font-weight: 600;
+  padding: 2px 8px;
+  border-radius: 999px;
+  border: 1px solid var(--app-border);
+  background: var(--app-control-bg);
+  color: var(--app-text);
+}
+
+@media (max-width: 599px) {
+  .toolbar-search {
+    display: none;
+  }
+
+  .shell-content {
+    padding: clamp(10px, 2.5vw, 14px);
+  }
+}

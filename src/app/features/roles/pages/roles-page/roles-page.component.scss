@@ -1,0 +1,52 @@
+:host {
+  display: block;
+}
+
+.table {
+  width: 100%;
+  overflow-x: auto;
+}
+
+.roles-table {
+  width: 100%;
+  min-width: 860px;
+}
+
+.head {
+  padding: 16px 16px 0 16px;
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+  align-items: flex-start;
+}
+
+.title {
+  font-weight: 600;
+  color: var(--app-text);
+}
+
+.subtitle {
+  margin-top: 2px;
+  font-size: 0.875rem;
+  color: var(--app-text-muted);
+}
+
+.perm {
+  display: flex;
+  gap: 6px;
+  flex-wrap: wrap;
+}
+
+.actions-col {
+  width: 1%;
+  white-space: nowrap;
+}
+
+.row-actions {
+  display: flex;
+  justify-content: flex-end;
+}
+
+.name {
+  font-weight: 600;
+}

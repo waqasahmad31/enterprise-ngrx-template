@@ -1,0 +1,74 @@
+<app-page-header
+  title="Notifications"
+  subtitle="System and account notifications"
+></app-page-header>
+
+<mat-card>
+  <div class="head">
+    <div>
+      <div class="title">Inbox</div>
+      <div class="subtitle">
+        @if (unreadCount$ | async; as unread) {
+          {{ unread }} unread
+        }
+      </div>
+    </div>
+
+    <div class="actions">
+      <button mat-button type="button" (click)="markAllRead()">
+        <mat-icon aria-hidden="true">done_all</mat-icon>
+        Mark all read
+      </button>
+      <button mat-button type="button" color="warn" (click)="clear()">
+        <mat-icon aria-hidden="true">delete</mat-icon>
+        Clear
+      </button>
+    </div>
+  </div>
+
+  @if (hasItems$ | async) {
+    <div class="table">
+      <table mat-table [dataSource]="dataSource" class="notifications-table">
+        <ng-container matColumnDef="title">
+          <th mat-header-cell *matHeaderCellDef>Title</th>
+          <td mat-cell *matCellDef="let n" [class.unread]="!n.readAtEpochMs">
+            <div class="n-title">{{ n.title }}</div>
+            <div class="n-msg">{{ n.message }}</div>
+          </td>
+        </ng-container>
+
+        <ng-container matColumnDef="severity">
+          <th mat-header-cell *matHeaderCellDef>Severity</th>
+          <td mat-cell *matCellDef="let n">
+            <mat-chip-listbox aria-label="Severity" [disabled]="true">
+              <mat-chip-option [color]="severityColor(n.severity)" selected>
+                {{ n.severity }}
+              </mat-chip-option>
+            </mat-chip-listbox>
+          </td>
+        </ng-container>
+
+        <ng-container matColumnDef="created">
+          <th mat-header-cell *matHeaderCellDef>Created</th>
+          <td mat-cell *matCellDef="let n">{{ n.createdAtEpochMs | date: 'medium' }}</td>
+        </ng-container>
+
+        <ng-container matColumnDef="actions">
+          <th mat-header-cell *matHeaderCellDef class="actions-col"></th>
+          <td mat-cell *matCellDef="let n" class="row-actions">
+            <button mat-icon-button type="button" aria-label="Open" (click)="open(n.id, n.link)">
+              <mat-icon aria-hidden="true">arrow_forward</mat-icon>
+            </button>
+          </td>
+        </ng-container>
+
+        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+        <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+      </table>
+    </div>
+
+    <mat-paginator [pageSize]="10" [pageSizeOptions]="[10, 20, 50]"></mat-paginator>
+  } @else {
+    <p class="empty">No notifications.</p>
+  }
+</mat-card>

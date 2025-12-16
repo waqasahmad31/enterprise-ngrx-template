@@ -1,0 +1,39 @@
+@if (user$ | async; as user) {
+  <app-page-header
+    [title]="user.firstName + ' ' + user.lastName"
+    subtitle="User profile and metadata"
+  ></app-page-header>
+
+  <mat-card>
+    <div class="details">
+      <div class="row">
+        <div class="label">Email</div>
+        <div class="value">{{ user.email }}</div>
+      </div>
+
+      <div class="row">
+        <div class="label">Status</div>
+        <div class="value">
+          <mat-chip-listbox aria-label="User status" [disabled]="true">
+            <mat-chip-option [color]="statusColor(user.isActive)" selected>
+              {{ user.isActive ? 'Active' : 'Inactive' }}
+            </mat-chip-option>
+          </mat-chip-listbox>
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="label">Created</div>
+        <div class="value">{{ user.createdAtIso | date: 'medium' }}</div>
+      </div>
+    </div>
+
+    <div class="actions">
+      <a mat-stroked-button type="button" routerLink="/users">Back</a>
+      <a mat-flat-button type="button" [routerLink]="['/users', user.id, 'edit']">
+        <mat-icon aria-hidden="true">edit</mat-icon>
+        Edit
+      </a>
+    </div>
+  </mat-card>
+}

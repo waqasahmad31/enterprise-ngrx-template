@@ -1,0 +1,65 @@
+<app-page-header
+  title="Dashboard"
+  subtitle="Overview of key metrics and recent activity"
+></app-page-header>
+
+<section class="kpi-grid" aria-label="Key metrics">
+  @for (kpi of kpis; track kpi.label) {
+    <mat-card class="kpi">
+      <div class="kpi-head">
+        <div class="kpi-icon" aria-hidden="true">
+          <mat-icon aria-hidden="true">{{ kpi.icon }}</mat-icon>
+        </div>
+        <mat-chip-listbox aria-label="KPI change" [disabled]="true">
+          <mat-chip-option [color]="badgeColor(kpi.badge.severity)" selected>
+            {{ kpi.badge.value }}
+          </mat-chip-option>
+        </mat-chip-listbox>
+      </div>
+      <div class="kpi-body">
+        <div class="kpi-label">{{ kpi.label }}</div>
+        <div class="kpi-value">{{ kpi.value }}</div>
+      </div>
+    </mat-card>
+  }
+</section>
+
+<section class="below" aria-label="Dashboard content">
+  <mat-card class="panel">
+    <div class="panel-header">
+      <div>
+        <div class="panel-title">Traffic (24h)</div>
+        <div class="panel-subtitle">Placeholder chart for operational dashboards</div>
+      </div>
+    </div>
+
+    <div class="chart-wrap" role="img" aria-label="Traffic chart">
+      <svg class="chart" viewBox="0 0 600 260" preserveAspectRatio="none">
+        <path class="series" [attr.d]="trafficPath"></path>
+      </svg>
+      <div class="chart-legend" aria-hidden="true">
+        @for (t of trafficLabels; track t) {
+          <span>{{ t }}</span>
+        }
+      </div>
+    </div>
+  </mat-card>
+
+  <mat-card class="panel">
+    <div class="panel-header">
+      <div>
+        <div class="panel-title">Recent activity</div>
+        <div class="panel-subtitle">Placeholder list for audit/activity feeds</div>
+      </div>
+    </div>
+
+    <div class="activity">
+      @for (item of recent; track item.title) {
+        <a class="activity-item" href="#" (click)="$event.preventDefault()">
+          <div class="activity-title">{{ item.title }}</div>
+          <div class="activity-subtitle">{{ item.subtitle }}</div>
+        </a>
+      }
+    </div>
+  </mat-card>
+</section>

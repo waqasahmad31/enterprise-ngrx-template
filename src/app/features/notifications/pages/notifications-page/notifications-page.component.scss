@@ -1,0 +1,73 @@
+:host {
+  display: block;
+}
+
+.table {
+  width: 100%;
+  overflow-x: auto;
+}
+
+.notifications-table {
+  width: 100%;
+  min-width: 860px;
+}
+
+.head {
+  padding: 16px 16px 0 16px;
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+  align-items: flex-start;
+}
+
+.title {
+  font-weight: 600;
+  color: var(--app-text);
+}
+
+.subtitle {
+  margin-top: 2px;
+  font-size: 0.875rem;
+  color: var(--app-text-muted);
+}
+
+.actions {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.empty {
+  margin: 0;
+  color: var(--app-text-muted);
+}
+
+.actions-col {
+  width: 1%;
+  white-space: nowrap;
+}
+
+.row-actions {
+  display: flex;
+  justify-content: flex-end;
+}
+
+.n-title {
+  font-weight: 600;
+}
+
+.n-msg {
+  margin-top: 2px;
+  color: var(--app-text-muted);
+  font-size: 0.875rem;
+}
+
+.unread .n-title {
+  color: var(--app-text);
+}
+
+@media (max-width: 599px) {
+  .head {
+    flex-direction: column;
+  }
+}

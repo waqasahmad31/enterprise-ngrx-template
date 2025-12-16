@@ -1,0 +1,100 @@
+<app-page-header title="Users" subtitle="Manage users and access"></app-page-header>
+
+<div class="table-caption">
+  <div class="left">
+    <a mat-flat-button type="button" routerLink="/users/new">
+      <mat-icon aria-hidden="true">person_add</mat-icon>
+      New user
+    </a>
+
+    <button mat-button type="button" (click)="refresh()">
+      <mat-icon aria-hidden="true">refresh</mat-icon>
+      Refresh
+    </button>
+  </div>
+
+  <mat-form-field class="search" appearance="outline" subscriptSizing="dynamic">
+    <mat-icon matPrefix aria-hidden="true">search</mat-icon>
+    <input
+      matInput
+      type="search"
+      placeholder="Search users"
+      aria-label="Search users"
+      [value]="filterValue"
+      (input)="applyFilter(($any($event.target).value ?? '').toString())"
+    />
+    @if (filterValue) {
+      <button
+        mat-icon-button
+        matSuffix
+        type="button"
+        aria-label="Clear search"
+        (click)="applyFilter('')"
+      >
+        <mat-icon>close</mat-icon>
+      </button>
+    }
+  </mat-form-field>
+</div>
+
+<mat-card class="table-card">
+  @if ((loading$ | async) ?? false) {
+    <mat-progress-bar mode="indeterminate"></mat-progress-bar>
+  }
+
+  <div class="table">
+    <table mat-table [dataSource]="dataSource" matSort class="users-table">
+      <ng-container matColumnDef="name">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header>Name</th>
+        <td mat-cell *matCellDef="let u">
+          <a [routerLink]="['/users', u.id]">{{ u.firstName }} {{ u.lastName }}</a>
+        </td>
+      </ng-container>
+
+      <ng-container matColumnDef="email">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header>Email</th>
+        <td mat-cell *matCellDef="let u">{{ u.email }}</td>
+      </ng-container>
+
+      <ng-container matColumnDef="active">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header>Active</th>
+        <td mat-cell *matCellDef="let u">
+          <mat-chip-listbox aria-label="User status" [disabled]="true">
+            <mat-chip-option [color]="u.isActive ? 'primary' : 'warn'" selected>
+              {{ u.isActive ? 'Active' : 'Inactive' }}
+            </mat-chip-option>
+          </mat-chip-listbox>
+        </td>
+      </ng-container>
+
+      <ng-container matColumnDef="actions">
+        <th mat-header-cell *matHeaderCellDef class="actions-col"></th>
+        <td mat-cell *matCellDef="let u" class="row-actions">
+          <a
+            mat-icon-button
+            type="button"
+            [routerLink]="['/users', u.id, 'edit']"
+            aria-label="Edit user"
+          >
+            <mat-icon aria-hidden="true">edit</mat-icon>
+          </a>
+
+          <button
+            mat-icon-button
+            type="button"
+            color="warn"
+            (click)="delete(u)"
+            aria-label="Delete user"
+          >
+            <mat-icon aria-hidden="true">delete</mat-icon>
+          </button>
+        </td>
+      </ng-container>
+
+      <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+      <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+    </table>
+  </div>
+
+  <mat-paginator [pageSize]="10" [pageSizeOptions]="[10, 20, 50]"></mat-paginator>
+</mat-card>

@@ -1,0 +1,53 @@
+:host {
+  display: block;
+}
+
+.table {
+  overflow: auto;
+}
+
+.support-table {
+  width: 100%;
+  min-width: 760px;
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 16px;
+}
+
+.card-head {
+  padding: 16px 16px 0 16px;
+}
+
+.title {
+  font-weight: 600;
+  color: var(--app-text);
+}
+
+.subtitle {
+  margin-top: 2px;
+  font-size: 0.875rem;
+  color: var(--app-text-muted);
+}
+
+.actions {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.actions-col {
+  width: 1%;
+  white-space: nowrap;
+}
+
+.row-actions {
+  display: flex;
+  justify-content: flex-end;
+}
+
+.name {
+  font-weight: 600;
+}

@@ -1,0 +1,43 @@
+:host {
+  display: block;
+}
+
+.table {
+  width: 100%;
+  overflow-x: auto;
+}
+
+.integrations-table {
+  width: 100%;
+  min-width: 760px;
+}
+
+.head {
+  padding: 16px 16px 0 16px;
+}
+
+.title {
+  font-weight: 600;
+  color: var(--app-text);
+}
+
+.subtitle {
+  margin-top: 2px;
+  font-size: 0.875rem;
+  color: var(--app-text-muted);
+}
+
+.actions-col {
+  width: 1%;
+  white-space: nowrap;
+}
+
+.row-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 6px;
+}
+
+.name {
+  font-weight: 600;
+}

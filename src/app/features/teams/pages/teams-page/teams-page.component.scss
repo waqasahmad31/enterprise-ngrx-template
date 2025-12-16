@@ -1,0 +1,47 @@
+:host {
+  display: block;
+}
+
+.table {
+  width: 100%;
+  overflow-x: auto;
+}
+
+.teams-table {
+  width: 100%;
+  min-width: 720px;
+}
+
+.head {
+  padding: 16px 16px 0 16px;
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+  align-items: flex-start;
+}
+
+.title {
+  font-weight: 600;
+  color: var(--app-text);
+}
+
+.subtitle {
+  margin-top: 2px;
+  font-size: 0.875rem;
+  color: var(--app-text-muted);
+}
+
+.actions-col {
+  width: 1%;
+  white-space: nowrap;
+}
+
+.row-actions {
+  display: flex;
+  gap: 4px;
+  justify-content: flex-end;
+}
+
+.name {
+  font-weight: 600;
+}

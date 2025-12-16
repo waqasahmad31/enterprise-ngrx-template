@@ -14,6 +14,8 @@ import type { User, UserCreate, UserUpdate } from '@domain/users/user.model';
 
 const NETWORK_DELAY_MS = 250;
 
+const STORAGE_KEY = 'mock.api.state.v1';
+
 const nowIso = () => new Date().toISOString();
 
 const makeTokens = () => {
@@ -42,7 +44,7 @@ const getState = (): MockApiState => {
   };
 
   if (!container.__MOCK_API_STATE__) {
-    container.__MOCK_API_STATE__ = {
+    const fallback: MockApiState = {
       users: [
         {
           id: 'u_1',
@@ -64,9 +66,25 @@ const getState = (): MockApiState => {
       refreshToAccess: {},
       accessToUserId: {},
     };
+
+    // Persist token mappings so dev/mock sessions can survive page reloads.
+    try {
+      const raw = globalThis.localStorage?.getItem(STORAGE_KEY);
+      container.__MOCK_API_STATE__ = raw ? (JSON.parse(raw) as MockApiState) : fallback;
+    } catch {
+      container.__MOCK_API_STATE__ = fallback;
+    }
   }
 
   return container.__MOCK_API_STATE__;
+};
+
+const persistState = (state: MockApiState): void => {
+  try {
+    globalThis.localStorage?.setItem(STORAGE_KEY, JSON.stringify(state));
+  } catch {
+    // ignore
+  }
 };
 
 const adminPermissions = [
@@ -157,6 +175,7 @@ export const mockApiInterceptor: HttpInterceptorFn = (req, next) => {
         const tokens = makeTokens();
         db.refreshToAccess[tokens.refreshToken] = tokens.accessToken;
         db.accessToUserId[tokens.accessToken] = userId;
+        persistState(db);
 
         const response: LoginResponse = {
           user: makeAuthUser({ userId, email: body.email, isAdmin }),
@@ -182,6 +201,8 @@ export const mockApiInterceptor: HttpInterceptorFn = (req, next) => {
         const tokens = makeTokens();
         db.refreshToAccess[tokens.refreshToken] = tokens.accessToken;
         db.accessToUserId[tokens.accessToken] = userId;
+
+        persistState(db);
 
         return of(new HttpResponse({ status: 200, body: tokens }));
       }
@@ -218,6 +239,7 @@ export const mockApiInterceptor: HttpInterceptorFn = (req, next) => {
           createdAtIso: nowIso(),
         };
         db.users = [user, ...db.users];
+        persistState(db);
         return of(new HttpResponse({ status: 201, body: user }));
       }
 
@@ -242,11 +264,13 @@ export const mockApiInterceptor: HttpInterceptorFn = (req, next) => {
             ...patch,
           };
           db.users = db.users.map((u) => (u.id === id ? updated : u));
+          persistState(db);
           return of(new HttpResponse({ status: 200, body: updated }));
         }
 
         if (req.method === 'DELETE') {
           db.users = db.users.filter((u) => u.id !== id);
+          persistState(db);
           return of(new HttpResponse({ status: 204 }));
         }
       }

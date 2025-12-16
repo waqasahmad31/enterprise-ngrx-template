@@ -5,6 +5,7 @@ import { catchError, throwError } from 'rxjs';
 import { LoggingService } from '@core/logging/logging.service';
 import { ToastService } from '@core/notifications/toast.service';
 import { APP_MESSAGES } from '@domain/constants/app-messages';
+import { HTTP_HEADERS } from '@domain/constants/http-headers';
 import { mapHttpError } from './http-error.mapper';
 
 export const apiErrorInterceptor: HttpInterceptorFn = (req, next) => {
@@ -18,6 +19,7 @@ export const apiErrorInterceptor: HttpInterceptorFn = (req, next) => {
       logger.error('HTTP error', {
         url: req.url,
         method: req.method,
+        requestId: req.headers.get(HTTP_HEADERS.requestId),
         appError,
       });
 

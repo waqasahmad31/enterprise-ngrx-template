@@ -14,8 +14,7 @@ export const authTokenInterceptor: HttpInterceptorFn = (req, next) => {
     req.url.includes(API_PATHS.auth.login) ||
     req.url.includes(API_PATHS.auth.refresh) ||
     req.url.includes(API_PATHS.auth.logout) ||
-    req.url.includes(API_PATHS.auth.csrf) ||
-    req.url.includes(API_PATHS.auth.me);
+    req.url.includes(API_PATHS.auth.csrf);
 
   const withAuth =
     accessToken && !isAuthEndpoint

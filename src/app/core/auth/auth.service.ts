@@ -1,19 +1,17 @@
-import { HttpClient } from '@angular/common/http';
 import { Injectable, PLATFORM_ID, inject } from '@angular/core';
 import { isPlatformBrowser } from '@angular/common';
 import { Router } from '@angular/router';
 import { BehaviorSubject, firstValueFrom } from 'rxjs';
 
-import { AppConfigService } from '@core/config/app-config.service';
+import { AuthApiService } from '@core/auth/auth-api.service';
 import { LoggingService } from '@core/logging/logging.service';
 import { BrowserStorageService } from '@core/platform/browser-storage.service';
 import { ToastService } from '@core/notifications/toast.service';
-import { API_PATHS, APP_MESSAGES, APP_ROUTES, HTTP_HEADERS } from '@domain/constants';
+import { APP_MESSAGES, APP_ROUTES } from '@domain/constants';
 import type {
   AuthTokens,
   AuthUser,
   LoginRequest,
-  LoginResponse,
   Permission,
   UserRole,
 } from '@domain/auth/auth.models';
@@ -29,13 +27,14 @@ const STORAGE_KEY = 'auth.session.v1';
 
 @Injectable({ providedIn: 'root' })
 export class AuthService {
-  private readonly http = inject(HttpClient);
+  private readonly api = inject(AuthApiService);
   private readonly router = inject(Router);
-  private readonly config = inject(AppConfigService);
   private readonly logger = inject(LoggingService);
   private readonly toasts = inject(ToastService);
   private readonly storage = inject(BrowserStorageService);
   private readonly platformId = inject(PLATFORM_ID);
+
+  private initPromise: Promise<void> | null = null;
 
   private readonly _user = new BehaviorSubject<AuthUser | null>(null);
   private readonly _tokens = new BehaviorSubject<AuthTokens | null>(null);
@@ -94,10 +93,7 @@ export class AuthService {
 
   async login(request: LoginRequest): Promise<boolean> {
     try {
-      const baseUrl = this.config.config().apiBaseUrl;
-      const response = await firstValueFrom(
-        this.http.post<LoginResponse>(`${baseUrl}${API_PATHS.auth.login}`, request),
-      );
+      const response = await firstValueFrom(this.api.login(request));
 
       if (this.usesCookieAuth) {
         this._user.next(response.user);
@@ -118,6 +114,13 @@ export class AuthService {
    * In dev/mock mode: restores last session from local storage and validates it via /auth/me.
    */
   async init(): Promise<void> {
+    if (this.initPromise) return this.initPromise;
+
+    this.initPromise = this.doInit();
+    return this.initPromise;
+  }
+
+  private async doInit(): Promise<void> {
     if (!this.isBrowser) return;
 
     if (this.usesCookieAuth) {
@@ -137,12 +140,7 @@ export class AuthService {
 
     // Validate restored session (and refresh user permissions/roles if needed).
     try {
-      const baseUrl = this.config.config().apiBaseUrl;
-      const user = await firstValueFrom(
-        this.http.get<AuthUser>(`${baseUrl}${API_PATHS.auth.me}`, {
-          headers: { [HTTP_HEADERS.skipAuthRefresh]: '1' },
-        }),
-      );
+      const user = await firstValueFrom(this.api.me());
 
       this._user.next(user);
     } catch (error) {
@@ -154,12 +152,7 @@ export class AuthService {
   logout(): void {
     if (this.usesCookieAuth) {
       try {
-        const baseUrl = this.config.config().apiBaseUrl;
-        void firstValueFrom(
-          this.http.post<void>(`${baseUrl}${API_PATHS.auth.logout}`, null, {
-            headers: { [HTTP_HEADERS.skipAuthRefresh]: '1' },
-          }),
-        );
+        void firstValueFrom(this.api.logout());
       } catch {
         // Best-effort.
       }
@@ -186,10 +179,7 @@ export class AuthService {
 
   private async doRefresh(refreshToken: string): Promise<AuthTokens | null> {
     try {
-      const baseUrl = this.config.config().apiBaseUrl;
-      const next = await firstValueFrom(
-        this.http.post<AuthTokens>(`${baseUrl}${API_PATHS.auth.refresh}`, { refreshToken }),
-      );
+      const next = await firstValueFrom(this.api.refreshToken(refreshToken));
 
       const user = this._user.value;
       if (user) this.setSession(user, next);
@@ -222,20 +212,10 @@ export class AuthService {
 
   private async initCookieSession(): Promise<void> {
     try {
-      const baseUrl = this.config.config().apiBaseUrl;
-
       // Ensure the XSRF cookie exists so Angular will attach the header on POST/PUT/etc.
-      await firstValueFrom(
-        this.http.get<void>(`${baseUrl}${API_PATHS.auth.csrf}`, {
-          headers: { [HTTP_HEADERS.skipAuthRefresh]: '1' },
-        }),
-      );
+      await firstValueFrom(this.api.csrf());
 
-      const user = await firstValueFrom(
-        this.http.get<AuthUser>(`${baseUrl}${API_PATHS.auth.me}`, {
-          headers: { [HTTP_HEADERS.skipAuthRefresh]: '1' },
-        }),
-      );
+      const user = await firstValueFrom(this.api.me());
 
       this._user.next(user);
       this._tokens.next(null);
@@ -261,19 +241,10 @@ export class AuthService {
 
   private async doCookieRefresh(): Promise<boolean> {
     try {
-      const baseUrl = this.config.config().apiBaseUrl;
-      await firstValueFrom(
-        this.http.post<void>(`${baseUrl}${API_PATHS.auth.refresh}`, null, {
-          headers: { [HTTP_HEADERS.skipAuthRefresh]: '1' },
-        }),
-      );
+      await firstValueFrom(this.api.refreshCookie());
 
       // Refresh succeeded; re-sync user.
-      const user = await firstValueFrom(
-        this.http.get<AuthUser>(`${baseUrl}${API_PATHS.auth.me}`, {
-          headers: { [HTTP_HEADERS.skipAuthRefresh]: '1' },
-        }),
-      );
+      const user = await firstValueFrom(this.api.me());
 
       this._user.next(user);
       this._tokens.next(null);

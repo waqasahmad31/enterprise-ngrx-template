@@ -47,6 +47,33 @@ app.use(express.urlencoded({ extended: false, limit: '100kb' }));
 // Cookies (required for HttpOnly session auth).
 app.use(cookieParser());
 
+// Request IDs + minimal structured request logging.
+app.use((req, res, next) => {
+  const existing = req.get('X-Request-Id');
+  const requestId = existing || crypto.randomUUID();
+
+  res.setHeader('X-Request-Id', requestId);
+  (req as unknown as { requestId?: string }).requestId = requestId;
+
+  const start = Date.now();
+  res.on('finish', () => {
+    const ms = Date.now() - start;
+    // Keep logs compact and machine-friendly.
+    console.log(
+      JSON.stringify({
+        ts: new Date().toISOString(),
+        requestId,
+        method: req.method,
+        path: req.originalUrl,
+        status: res.statusCode,
+        ms,
+      }),
+    );
+  });
+
+  next();
+});
+
 // Global rate limit baseline. Tighten and/or add route-specific limits for auth.
 app.use(
   rateLimit({
@@ -59,6 +86,9 @@ app.use(
 
 // Health endpoint for container/orchestrator probes.
 app.get('/healthz', (_req, res) => res.status(200).send('ok'));
+
+// Readiness endpoint (extend with real checks: DB, upstream auth, etc.).
+app.get('/readyz', (_req, res) => res.status(200).send('ready'));
 
 /**
  * Cookie-based auth BFF (same-origin) for production.

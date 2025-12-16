@@ -76,6 +76,20 @@ This project uses Angular's server output mode (SSR runtime). Server render-mode
   - `GET/POST /api/users`
   - `GET/PUT/DELETE /api/users/:id`
 
+### Mock API (development-only)
+
+The in-app mock API is intended for local development/demo only.
+
+- Enabled by default in `src/environments/environment.ts` via `mockApiEnabled: true`.
+- Disabled in production in `src/environments/environment.prod.ts` via `mockApiEnabled: false`.
+- The interceptor is only registered when `!environment.production && environment.mockApiEnabled`.
+
+To connect a real backend API:
+
+1. Set `mockApiEnabled: false`.
+2. Ensure runtime config `apiBaseUrl` points to your backend.
+3. Implement server-side auth endpoints or wire to your existing auth.
+
 ### Production auth (cookie session via SSR server)
 
 In production mode, this template is designed to run as a same-origin “BFF” using the SSR Express server in `src/server.ts`:

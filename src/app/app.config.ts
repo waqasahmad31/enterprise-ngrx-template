@@ -32,6 +32,7 @@ import { GlobalErrorHandler } from '@core/error/global-error-handler';
 import { apiErrorInterceptor } from '@core/http/api-error.interceptor';
 import { authTokenInterceptor } from '@core/http/auth-token.interceptor';
 import { mockApiInterceptor } from '@core/http/mock-api.interceptor';
+import { requestIdInterceptor } from '@core/http/request-id.interceptor';
 import { httpLoadingInterceptor } from '@core/loading/http-loading.interceptor';
 import { NavigationLoadingService } from '@core/loading/navigation-loading.service';
 import { SelectivePreloadingStrategy } from '@core/routing/selective-preloading-strategy';
@@ -53,6 +54,7 @@ export const appConfig: ApplicationConfig = {
       }),
       withInterceptors([
         httpLoadingInterceptor,
+        requestIdInterceptor,
         authTokenInterceptor,
         ...(environment.production || !environment.mockApiEnabled ? [] : [mockApiInterceptor]),
         apiErrorInterceptor,

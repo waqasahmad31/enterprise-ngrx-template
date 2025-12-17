@@ -3,7 +3,7 @@
     class="shell-sidenav"
     [mode]="sidenavMode()"
     [opened]="sidenavOpened()"
-    (openedChange)="drawerOpen = $event"
+    (openedChange)="onDrawerOpenedChange($event)"
   >
     <div class="brand" aria-label="Application">
       <mat-icon aria-hidden="true">business</mat-icon>
@@ -32,17 +32,17 @@
   <mat-sidenav-content class="shell">
     <mat-toolbar class="shell-toolbar">
       <div class="toolbar-start">
-        @if (isHandset()) {
-          <button
-            mat-icon-button
-            type="button"
-            class="menu-btn"
-            aria-label="Toggle navigation"
-            (click)="toggleDrawer()"
-          >
-            <mat-icon>menu</mat-icon>
-          </button>
-        }
+        <button
+          mat-icon-button
+          type="button"
+          class="menu-btn"
+          aria-label="Toggle sidebar"
+          (click)="toggleDrawer()"
+        >
+          <mat-icon>{{ sidenavOpened() ? 'menu_open' : 'menu' }}</mat-icon>
+        </button>
+
+        <mat-icon class="toolbar-brand-icon" aria-hidden="true">business</mat-icon>
         <span class="toolbar-title">Enterprise</span>
       </div>
 

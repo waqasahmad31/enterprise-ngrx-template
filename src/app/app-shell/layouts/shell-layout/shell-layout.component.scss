@@ -36,6 +36,10 @@
   gap: 8px;
 }
 
+.toolbar-brand-icon {
+  color: var(--app-text);
+}
+
 .toolbar-center {
   flex: 1;
   display: flex;
@@ -54,12 +58,12 @@
 
 .toolbar-title {
   font-size: 1.125rem;
-  font-weight: 600;
+  font-weight: var(--app-font-weight-semibold);
   color: var(--app-text);
 }
 
 .toolbar-search {
-  width: min(640px, 46vw);
+  width: min(520px, 40vw);
 }
 
 .toolbar-search .shell-search {
@@ -83,7 +87,7 @@
   align-items: center;
   padding: 12px 10px 14px;
   font-size: 1.125rem;
-  font-weight: 600;
+  font-weight: var(--app-font-weight-semibold);
   color: var(--app-text);
   border-bottom: 1px solid var(--app-border);
   margin: -2px 0 10px;
@@ -103,7 +107,7 @@
 
 .nav-section-title {
   font-size: 0.75rem;
-  font-weight: 600;
+  font-weight: var(--app-font-weight-semibold);
   opacity: 0.8;
   padding: 10px 12px 6px;
 }
@@ -120,7 +124,7 @@
 }
 
 .search-label {
-  font-weight: 600;
+  font-weight: var(--app-font-weight-semibold);
 }
 
 .search-desc {
@@ -130,7 +134,7 @@
 
 .search-type {
   font-size: 0.75rem;
-  font-weight: 600;
+  font-weight: var(--app-font-weight-semibold);
   padding: 2px 8px;
   border-radius: 999px;
   border: 1px solid var(--app-border);

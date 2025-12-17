@@ -11,6 +11,7 @@
 
 .kpi {
   border: 1px solid var(--app-border);
+  padding: var(--app-card-padding);
 }
 
 .kpi-head {
@@ -40,7 +41,7 @@
 .kpi-value {
   color: var(--app-text);
   font-size: 1.5rem;
-  font-weight: 600;
+  font-weight: var(--app-font-weight-semibold);
   margin-top: 2px;
 }
 
@@ -52,6 +53,7 @@
 
 .panel {
   border: 1px solid var(--app-border);
+  padding: var(--app-card-padding);
 }
 
 .panel-header {
@@ -62,7 +64,7 @@
 }
 
 .panel-title {
-  font-weight: 600;
+  font-weight: var(--app-font-weight-semibold);
   color: var(--app-text);
 }
 
@@ -77,7 +79,7 @@
   border: 1px solid var(--app-border);
   border-radius: 12px;
   overflow: hidden;
-  background: var(--app-bg);
+  background: var(--app-surface);
   padding: 12px;
   display: grid;
   align-content: start;
@@ -121,10 +123,11 @@
   border: 1px solid var(--app-border);
   text-decoration: none;
   color: inherit;
+  background: var(--app-surface);
 }
 
 .activity-item:hover {
-  background: var(--app-bg);
+  background: var(--app-hover-bg);
 }
 
 .activity-item:focus-visible {
@@ -133,7 +136,7 @@
 }
 
 .activity-title {
-  font-weight: 600;
+  font-weight: var(--app-font-weight-semibold);
 }
 
 .activity-subtitle {

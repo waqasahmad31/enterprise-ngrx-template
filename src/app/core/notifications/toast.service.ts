@@ -3,6 +3,7 @@ import { Injectable, PLATFORM_ID, inject } from '@angular/core';
 import { MatSnackBar } from '@angular/material/snack-bar';
 
 import type { ToastType } from './toast.models';
+import { ToastSnackComponent } from './toast-snack/toast-snack.component';
 
 const DEFAULT_DURATION_MS: Record<ToastType, number> = {
   success: 3000,
@@ -36,12 +37,16 @@ export class ToastService {
     // Snackbars require DOM APIs; no-op during SSR.
     if (!isPlatformBrowser(this.platformId)) return;
 
-    const text = title ? `${title}: ${message}` : message;
-    this.snackBar.open(text, 'Dismiss', {
+    this.snackBar.openFromComponent(ToastSnackComponent, {
+      data: {
+        type,
+        title,
+        message,
+      },
       duration: DEFAULT_DURATION_MS[type],
       horizontalPosition: 'right',
       verticalPosition: 'top',
-      panelClass: [`toast-${type}`],
+      panelClass: ['toast-snack', `toast-${type}`],
     });
   }
 }

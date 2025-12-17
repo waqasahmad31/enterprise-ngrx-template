@@ -8,6 +8,8 @@
 .table {
   width: 100%;
   overflow-x: auto;
+  border: 1px solid var(--app-border);
+  border-radius: var(--app-radius);
 }
 
 table {
@@ -54,4 +56,33 @@ table {
 
 .table-card {
   padding: 0;
+}
+
+/* Angular Material table refinements */
+.users-table .mat-mdc-header-cell {
+  font-weight: var(--app-font-weight-semibold);
+  color: var(--app-text);
+}
+
+.users-table .mat-mdc-header-row {
+  background: var(--app-table-header-bg);
+}
+
+.users-table .mat-mdc-row:hover {
+  background: var(--app-hover-bg);
+}
+
+/* Subtle zebra striping for readability */
+.users-table .mat-mdc-row:nth-child(even) {
+  background: var(--app-table-stripe-bg);
+}
+
+.users-table .mat-mdc-cell,
+.users-table .mat-mdc-header-cell {
+  padding-top: 14px;
+  padding-bottom: 14px;
+}
+
+.actions-col {
+  padding-right: 10px;
 }

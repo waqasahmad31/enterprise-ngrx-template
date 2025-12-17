@@ -8,9 +8,11 @@ import { AuthService } from './auth.service';
 import { authGuard } from './auth.guard';
 
 describe('authGuard', () => {
-  const authMock: Partial<AuthService> = {
-    isAuthenticated: false,
-  } as AuthService;
+  const authMock =
+    ({
+      init: vi.fn().mockResolvedValue(undefined),
+      isAuthenticated: false,
+    }) as unknown as AuthService;
 
   const routerMock = {
     createUrlTree: vi.fn(),
@@ -27,10 +29,10 @@ describe('authGuard', () => {
     });
   });
 
-  it('allows navigation when user is authenticated', () => {
+  it('allows navigation when user is authenticated', async () => {
     (authMock as any).isAuthenticated = true;
 
-    const result = TestBed.runInInjectionContext(() =>
+    const result = await TestBed.runInInjectionContext(() =>
       authGuard({} as any, { url: '/dashboard' } as any),
     );
 
@@ -38,13 +40,13 @@ describe('authGuard', () => {
     expect(routerMock.createUrlTree).not.toHaveBeenCalled();
   });
 
-  it('redirects to login with returnUrl when user is not authenticated', () => {
+  it('redirects to login with returnUrl when user is not authenticated', async () => {
     (authMock as any).isAuthenticated = false;
 
     const urlTree = {} as any;
     (routerMock.createUrlTree as any).mockReturnValue(urlTree);
 
-    const result = TestBed.runInInjectionContext(() =>
+    const result = await TestBed.runInInjectionContext(() =>
       authGuard({} as any, { url: '/users' } as any),
     );
 

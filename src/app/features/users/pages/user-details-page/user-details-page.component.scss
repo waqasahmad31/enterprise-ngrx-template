@@ -27,11 +27,16 @@
   display: flex;
   gap: 12px;
   margin-top: 16px;
+  justify-content: flex-end;
 }
 
 @media (max-width: 599px) {
   .row {
     grid-template-columns: 1fr;
     gap: 6px;
+  }
+
+  .actions {
+    justify-content: flex-start;
   }
 }

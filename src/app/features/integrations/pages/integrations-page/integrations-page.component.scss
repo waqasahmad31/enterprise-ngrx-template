@@ -5,6 +5,8 @@
 .table {
   width: 100%;
   overflow-x: auto;
+  border: 1px solid var(--app-border);
+  border-radius: var(--app-radius);
 }
 
 .integrations-table {
@@ -13,11 +15,11 @@
 }
 
 .head {
-  padding: 16px 16px 0 16px;
+  margin-bottom: 12px;
 }
 
 .title {
-  font-weight: 600;
+  font-weight: var(--app-font-weight-semibold);
   color: var(--app-text);
 }
 
@@ -39,5 +41,5 @@
 }
 
 .name {
-  font-weight: 600;
+  font-weight: var(--app-font-weight-semibold);
 }

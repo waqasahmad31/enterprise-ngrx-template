@@ -42,8 +42,11 @@ html.app-dark {
   --app-radius: 12px;
 
   /* Typography primitives. */
+  --app-font-family: Roboto, system-ui, -apple-system, Segoe UI, Arial, sans-serif;
   --app-font-size: 16px;
   --app-line-height: 1.5;
+  --app-font-weight-regular: 400;
+  --app-font-weight-medium: 500;
   --app-font-weight-semibold: 600;
 
   /* App semantic mapping to Angular Material system tokens (with fallbacks). */
@@ -79,15 +82,10 @@ html.app-dark {
 body {
   background-color: var(--app-bg);
   color: var(--app-text);
-  font-family:
-    Roboto,
-    system-ui,
-    -apple-system,
-    Segoe UI,
-    Arial,
-    sans-serif;
+  font-family: var(--app-font-family);
   font-size: var(--app-font-size);
   line-height: var(--app-line-height);
+  font-weight: var(--app-font-weight-regular);
   -webkit-text-size-adjust: 100%;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
@@ -96,19 +94,22 @@ body {
   margin: 0;
 }
 
+/* Material baseline refinements (project-wide)
+   Keep these minimal and token-driven to preserve the design system. */
+.mat-mdc-card {
+  padding: var(--app-card-padding);
+  background: var(--app-surface);
+  border: 1px solid var(--app-border);
+  border-radius: var(--app-radius);
+}
+
 html,
 body {
   height: 100%;
 }
 
 html {
-  font-family:
-    Roboto,
-    system-ui,
-    -apple-system,
-    Segoe UI,
-    Arial,
-    sans-serif;
+  font-family: var(--app-font-family);
   text-rendering: optimizeLegibility;
 }
 
@@ -135,8 +136,14 @@ html {
   display: inline-block;
   margin-bottom: 0.375rem;
   font-size: 0.875rem;
-  font-weight: 500;
+  font-weight: var(--app-font-weight-medium);
   color: var(--app-text-muted);
+}
+
+/* Global headings */
+:where(h1, h2, h3, h4, h5, h6) {
+  color: var(--app-text);
+  font-weight: var(--app-font-weight-semibold);
 }
 
 /* Overlay content (rendered outside Angular component style encapsulation) */
@@ -159,7 +166,7 @@ html {
 }
 
 .search-panel .search-label {
-  font-weight: 600;
+  font-weight: var(--app-font-weight-semibold);
   color: var(--app-text);
 }
 
@@ -192,7 +199,7 @@ html {
 }
 
 .notif-panel .notif-title {
-  font-weight: 600;
+  font-weight: var(--app-font-weight-semibold);
   color: var(--app-text);
 }
 
@@ -222,22 +229,116 @@ html {
 }
 
 .notif-panel .notif-item:hover {
-  background: var(--app-bg);
+  background: var(--app-hover-bg);
 }
 
 .notif-panel .notif-item.unread {
-  font-weight: 600;
+  font-weight: var(--app-font-weight-semibold);
 }
 
 .notif-panel .notif-item-title {
-  font-weight: 600;
+  font-weight: var(--app-font-weight-semibold);
 }
 
 .notif-panel .notif-item-msg {
   margin-top: 2px;
-  font-weight: 400;
+  font-weight: var(--app-font-weight-regular);
   color: var(--app-text-muted);
   font-size: 0.875rem;
+}
+
+/* Toasts (MatSnackBar overlay) */
+.mat-mdc-snack-bar-container.toast-snack {
+  --_toast-border: var(--app-border);
+  --_toast-bg: var(--app-surface);
+  --_toast-text: var(--app-text);
+}
+
+.mat-mdc-snack-bar-container.toast-snack .mdc-snackbar__surface {
+  background: var(--_toast-bg);
+  color: var(--_toast-text);
+  border: 1px solid var(--_toast-border);
+  border-radius: var(--app-radius);
+}
+
+.mat-mdc-snack-bar-container.toast-snack .toast {
+  display: grid;
+  grid-template-columns: auto 1fr auto;
+  align-items: start;
+  gap: 10px;
+}
+
+.mat-mdc-snack-bar-container.toast-snack .toast-icon {
+  margin-top: 2px;
+}
+
+.mat-mdc-snack-bar-container.toast-snack .toast-title {
+  font-weight: var(--app-font-weight-semibold);
+  line-height: 1.25;
+}
+
+.mat-mdc-snack-bar-container.toast-snack .toast-message {
+  margin-top: 2px;
+  color: var(--app-text-muted);
+  line-height: 1.35;
+}
+
+.mat-mdc-snack-bar-container.toast-success {
+  --_toast-bg: color-mix(in oklab, var(--mat-sys-primary-container) 60%, var(--app-surface) 40%);
+}
+
+.mat-mdc-snack-bar-container.toast-info {
+  --_toast-bg: color-mix(in oklab, var(--app-hover-bg) 70%, var(--app-surface) 30%);
+}
+
+.mat-mdc-snack-bar-container.toast-warning {
+  --_toast-bg: color-mix(in oklab, var(--mat-sys-tertiary-container) 55%, var(--app-surface) 45%);
+}
+
+.mat-mdc-snack-bar-container.toast-error {
+  --_toast-bg: color-mix(in oklab, var(--mat-sys-error-container) 55%, var(--app-surface) 45%);
+}
+
+/* Global Material table styling (applies across all feature tables/grids) */
+.mat-mdc-table {
+  width: 100%;
+}
+
+.mat-mdc-table .mat-mdc-header-row {
+  background: var(--app-table-header-bg);
+}
+
+.mat-mdc-table .mat-mdc-header-cell {
+  font-weight: var(--app-font-weight-semibold);
+  color: var(--app-text);
+}
+
+.mat-mdc-table .mat-mdc-cell,
+.mat-mdc-table .mat-mdc-header-cell {
+  padding-top: 14px;
+  padding-bottom: 14px;
+}
+
+.mat-mdc-table .mat-mdc-row:hover {
+  background: var(--app-hover-bg);
+}
+
+.mat-mdc-table .mat-mdc-row:nth-child(even) {
+  background: var(--app-table-stripe-bg);
+}
+
+.mat-mdc-table a {
+  color: var(--mat-sys-primary, currentColor);
+  text-decoration: none;
+  font-weight: var(--app-font-weight-medium);
+}
+
+.mat-mdc-table a:hover {
+  text-decoration: underline;
+}
+
+.mat-mdc-paginator {
+  border-top: 1px solid var(--app-border);
 }
 
 .notif-panel .notif-actions {

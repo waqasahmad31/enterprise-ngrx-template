@@ -74,7 +74,8 @@ export class ShellLayoutComponent {
   readonly unreadCountSignal = toSignal(this.unreadCount$, { initialValue: 0 });
   readonly notificationItemsSignal = toSignal(this.notificationItems$, { initialValue: [] });
 
-  drawerOpen = false;
+  handsetDrawerOpen = false;
+  desktopDrawerOpen = true;
 
   searchQuery = '';
   searchSuggestions: SearchResult[] = [];
@@ -132,7 +133,9 @@ export class ShellLayoutComponent {
   );
 
   readonly sidenavMode = computed(() => (this.isHandset() ? 'over' : 'side'));
-  readonly sidenavOpened = computed(() => (!this.isHandset() ? true : this.drawerOpen));
+  readonly sidenavOpened = computed(() =>
+    this.isHandset() ? this.handsetDrawerOpen : this.desktopDrawerOpen,
+  );
 
   constructor() {
     this.searchQuery$
@@ -157,13 +160,24 @@ export class ShellLayoutComponent {
   }
 
   toggleDrawer(): void {
-    if (!this.isHandset()) return;
-    this.drawerOpen = !this.drawerOpen;
+    if (this.isHandset()) {
+      this.handsetDrawerOpen = !this.handsetDrawerOpen;
+      return;
+    }
+    this.desktopDrawerOpen = !this.desktopDrawerOpen;
+  }
+
+  onDrawerOpenedChange(opened: boolean): void {
+    if (this.isHandset()) {
+      this.handsetDrawerOpen = opened;
+      return;
+    }
+    this.desktopDrawerOpen = opened;
   }
 
   closeDrawer(): void {
     if (!this.isHandset()) return;
-    this.drawerOpen = false;
+    this.handsetDrawerOpen = false;
   }
 
   onSearchInput(value: string): void {

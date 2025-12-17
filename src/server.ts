@@ -30,7 +30,9 @@ app.use(
       directives: {
         // Angular SSR apps commonly need inline styles from component rendering.
         // Prefer removing 'unsafe-inline' by using nonces/hashes if feasible.
-        'style-src': ["'self'", "'unsafe-inline'"],
+        // Allow Google Fonts stylesheet + font files (used by Roboto and Material icons).
+        'style-src': ["'self'", "'unsafe-inline'", 'https://fonts.googleapis.com'],
+        'font-src': ["'self'", 'https://fonts.gstatic.com', 'data:'],
       },
     },
     crossOriginEmbedderPolicy: false,
